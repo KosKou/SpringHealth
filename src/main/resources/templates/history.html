@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Patients History</title>
+    <!--Style Sheets-->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
+
+    <style>
+        div.top-p{
+            padding-top: 70px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <!--Begin of NavBar-->
+        <nav class="navbar navbar-expand-md navbar-dark bg-dark fixed-top">
+            <div class="container-fluid" th:switch="${mode}">
+                <a class="navbar-brand" href="/">History</a>
+                <ul class="navbar-nav" th:case="HISTORY_VIEW">
+                    <li class="nav-item">
+                        <a href="/patient" class="nav-link">Back to Patients</a>
+                    </li>
+                    <li class="active nav-item">
+                        <a th:href="@{/checkHistory(id=${patient_id})}" class="nav-link">Histories</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/newHistory(id=${patient_id})}" class="nav-link">New History</a>
+                    </li>
+                </ul>
+                <ul class="navbar-nav" th:case="HISTORY_EDIT">
+                    <li class="nav-item">
+                        <a href="/patient" class="nav-link">Back to Patients</a>
+                    </li>
+                    <li class="nav-item">
+                        <a th:href="@{/checkHistory(id=${patient_id})}" class="nav-link">Histories</a>
+                    </li>
+                    <li class="nav-item active">
+                        <a th:href="@{/newHistory(id=${patient_id})}" class="nav-link">New History</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+        <!--End of NavBar-->
+    </header>
+
+    <!--List MODES-->
+    <div class="container-fluid top-p" th:switch="${mode}">
+        <div th:case="HISTORY_VIEW">
+            <div th:if="${histories != 0}">
+                <th:block th:each="history : ${histories}">
+                    <div class="card">
+                        <div class="card-body">
+                            <h5 class="card-title" th:text="'Patient: ' + ${history.patient.firstName}
+                + ' ' + ${history.patient.lastName}"></h5>
+                            <div class="row">
+                                <input type="hidden" th:value="${history.patient.id}">
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h2 th:text="'Hospital: '+ ${history.hospital}"></h2>
+                                </div>
+                                <div class="col">
+                                    <h2 type="date" th:text="'Fecha de Atencion: '+${history.attentionDate}"></h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h2 th:text="'Razon: '+${history.reason}"></h2>
+                                </div>
+                                <div class="col">
+                                    <h2 th:text="'Medico: '+${history.doctorName}"></h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h2 th:text="'Descripcion: '+${history.description}"></h2>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col">
+                                    <h2 th:text="'Medicamentos: '+${history.drugs}"></h2>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </th:block>
+            </div>
+            <div th:if="${histories.size() == 0}">
+                <div class="card">
+                    <h1 >No hay Historial de este Paciente</h1>
+                </div>
+            </div>
+        </div>
+        <div th:case="HISTORY_EDIT">
+            <form action="/saveHistory" method="post">
+                <h2 th:text="'Paciente: '+${history.patient.firstName}+
+                ' '+${history.patient.lastName}"></h2>
+                <input type="hidden" class="form-control" th:value="${history.id}" name="id" id="id">
+                <input type="hidden" class="form-control" th:value="${history.patient}" name="patient" id="patient">
+                <input type="hidden" class="form-control" th:value="${history.patient.id}" name="patient.id" id="patient.id">
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="hospital">Hospital</label>
+                            <input type="text" class="form-control" th:value="${history.hospital}"
+                                   name="hospital" id="hospital" placeholder="Hospital">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="attentionDate">Attention Date</label>
+                            <input type="date" class="form-control" th:value="${history.attentionDate}"
+                                   name="attentionDate" id="attentionDate" placeholder="Attention Date">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="doctorName">Doctor Name</label>
+                            <input type="text" class="form-control" th:value="${history.doctorName}"
+                                   name="doctorName" id="doctorName" placeholder="Doctor">
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="reason">Reason</label>
+                            <input type="text" class="form-control" th:value="${history.reason}"
+                                   name="reason" id="reason" placeholder="Reason">
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="description">Description</label>
+                            <textarea class="form-control" th:value="${history.description}" id="description"
+                             name="description"></textarea>
+                        </div>
+                    </div>
+                    <div class="col">
+                        <div class="form-group">
+                            <label for="drugs">Drugs</label>
+                            <textarea class="form-control" th:value="${history.drugs}" id="drugs"
+                                      name="drugs"></textarea>
+                        </div>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col">
+                        <button type="submit" class="button btn-primary btn">Submit</button>
+                    </div>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!--Bootstrap Scripts-->
+    <script src="js/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+    <!--Clip Scripts-->
+    <script src="js/clip.js"></script>
+</body>
+</html>
