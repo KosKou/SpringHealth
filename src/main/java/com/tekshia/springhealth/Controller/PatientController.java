@@ -52,6 +52,7 @@ public class PatientController {
     public String init(Model model, @RequestParam long id) {
         model.addAttribute("patient", patientService.findById(id));
         model.addAttribute("mode", "PATIENT_EDIT");
+        model.addAttribute("nations", nationService.findAll());
         return "patient";
     }
     /*
@@ -72,15 +73,9 @@ public class PatientController {
         dateFormat.setLenient(false);
         binder.registerCustomEditor(Date.class, new CustomDateEditor(dateFormat, false));
     }
-//    Configs
-    @GetMapping("/getDistricts")
-    public String getDistricts(Model model, @RequestParam long id){
+    @GetMapping("/ajax/listDistricts")
+    public String listDistricts(Model model, @RequestParam("nationality") long id){
         model.addAttribute("districts", districtService.findAllByNation(id));
-        return "/newPatient";
-    }
-
-    @GetMapping("/getPatient")
-    public Patient getPatient(Model model, @RequestParam long id){
-        return patientService.findById(id);
+        return "patient :: districts";
     }
 }

@@ -8,7 +8,7 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
     <!--Style Sheets-->
-    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/css/bootstrap.min.css" integrity="sha384-WskhaSGFgHYWDcbwN70/dfYBj47jz9qbsMId/iRN3ewGhXQFZCSftd1LZCfmhktB" crossorigin="anonymous">
+    <link rel="stylesheet" href="css/bootstrap.min.css">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.0.13/css/all.css" integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp" crossorigin="anonymous">
 
     <style>
@@ -123,13 +123,11 @@
                     <div class="col">
                         <div class="form-group">
                             <label for="patientGender">Gender</label>
-                            <!--<input type="text" class="form-control" placeholder="Gender" id="patientGender"-->
-                            <!--th:value="${patient.gender}">-->
                             <select class="custom-select" id="patientGender" name="gender"
                                     th:value="${patient.gender}">
-                                <option selected>Choose One...</option>
-                                <option>Male</option>
-                                <option>Female</option>
+                                <option>Choose One...</option>
+                                <option th:selected="${patient.gender} == Male">Male</option>
+                                <option th:selected="${patient.gender} == Female">Female</option>
                             </select>
                         </div>
                     </div>
@@ -150,17 +148,21 @@
                             <select class="custom-select" id="patientNationality" th:value="${patient.nationality}"
                                     name="nationality">
                                 <option selected>Choose One...</option>
-                                <th:block th:each="nation : ${nations}">
-                                    <option th:value="${nation.id}" th:text="${nation.nation}"></option>
-                                </th:block>
+                                <option th:each="nation : ${nations}" th:value="${nation.id}"
+                                        th:selected="${nation.nation} == ${patient.nationality.nation}"    th:text="${nation.nation}"></option>
                             </select>
                         </div>
                     </div>
                     <div class="col">
                         <div class="form-group">
-                            <label for="district">District</label>
-                            <input type="text" class="form-control" placeholder="City" id="district"
-                                   th:value="${patient.district}" name="district">
+                            <label for="patientDistrict">District</label>
+                            <select class="custom-select" id="patientDistrict" th:value="${patient.district}"
+                                    name="district">
+                                <option selected>Choose One...</option>
+                                <!--Uso de fragments-->
+                                <option th:fragment="districts" th:each="district : ${districts}" th:value="${district.id}"
+                                        th:text="${district.district}"></option>
+                            </select>
                         </div>
                     </div>
                     <div class="col">
@@ -204,5 +206,16 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
     <!--Clip Scripts-->
     <script src="js/clip.js"></script>
+    <!--List Districts-->
+    <script th:inline="javascript">
+        /*[+
+            $(function() {
+                $("#patientDistrict").load('/ajax/listDistricts', $("#patientNationality").serialize());
+                $('#patientNationality').on('change', function() {
+                    $("#patientDistrict").load('/ajax/listDistricts', $("#patientNationality").serialize());
+                });
+            });
+        +]*/
+    </script>
 </body>
 </html>
