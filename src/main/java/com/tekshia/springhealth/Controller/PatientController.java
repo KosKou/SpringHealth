@@ -60,7 +60,9 @@ public class PatientController {
     * */
     @GetMapping("/newPatient")
     public String addPatient(Model model) {
-        model.addAttribute("patient", new Patient());
+        Patient patient = new Patient();
+        patient.setNationality(new Nation());
+        model.addAttribute("patient", patient);
         model.addAttribute("mode", "PATIENT_EDIT");
         model.addAttribute("nations", nationService.findAll());
         return "patient";
