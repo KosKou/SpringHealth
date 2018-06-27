@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en"
+      xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Location</title>
+    <link rel="stylesheet" href="css/bootstrap.min.css">
+
+</head>
+<body>
+<form action="#" method="post">
+    <label for="nationality">Nationality</label>
+    <!--Combo Nation Box-->
+    <select class="custom-select" id="nationality"
+            name="nationality">
+        <option selected>Choose One...</option>
+        <option th:each="nation : ${nations}" th:value="${nation.id}" th:text="${nation.nation}"></option>
+    </select>
+
+    <label for="districtily">District</label>
+    <!--Combo Nation Box-->
+    <select class="custom-select" id="districtily"
+            name="districtily">
+        <option selected>Choose One...</option>
+        <option th:fragment="districts" th:each="district : ${districts}" th:value="${district.id}" th:text="${district.district}"></option>
+    </select>
+</form>
+<!--Bootstrap Scripts-->
+<script src="js/jquery-3.3.1.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.1/js/bootstrap.min.js" integrity="sha384-smHYKdLADwkXOn1EmN1qk/HfnUcbVRZyYmZ4qpPea6sjB/pTJ0euyQp0Mk8ck+5T" crossorigin="anonymous"></script>
+
+    <script th:inline="javascript">
+        /*[+
+            $(function() {
+                $('#nationality').on('change', function() {
+                    $("#districtily").load('/ajax/districts', $("#nationality").serialize());
+                });
+            });
+        +]*/
+    </script>
+</body>
+</html>

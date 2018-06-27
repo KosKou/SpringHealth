@@ -147,7 +147,7 @@
                             <!--Combo Nation Box-->
                             <select class="custom-select" id="patientNationality" th:value="${patient.nationality}"
                                     name="nationality">
-                                <option selected>Choose One...</option>
+                                <option selected th:value="0">Choose One...</option>
                                 <option th:each="nation : ${nations}" th:value="${nation.id}"
                                         th:selected="${nation.nation} == ${patient.nationality.nation}"    th:text="${nation.nation}"></option>
                             </select>
